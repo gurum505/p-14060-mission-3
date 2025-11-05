@@ -13,12 +13,34 @@ import java.util.Scanner;
 public class App {
     public void run() {
         Scanner sc = new Scanner(System.in);
-
-        WiseSayingController wiseSayingController = new WiseSayingController();
-        wiseSayingController.start();
-
         SystemController systemController = new SystemController();
-        systemController.start();
+        WiseSayingController wiseSayingController = new WiseSayingController();
+
+        System.out.println("=== 명언 앱 ===");
+
+        while(true){
+            System.out.print("명령) ");
+            String cmd = sc.nextLine();
+
+            Boolean shouldExit = false;
+            if (cmd.equals("등록") || cmd.equals("목록") || cmd.startsWith("삭제") || cmd.startsWith("수정")) {
+                wiseSayingController.start(cmd);
+            }
+            else{
+                shouldExit = systemController.start(cmd);
+            }
+
+            if(shouldExit){
+                break;
+            }
+        }
+
+
+
+
+
+
+
 
     }
 }

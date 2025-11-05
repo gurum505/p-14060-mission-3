@@ -1,7 +1,11 @@
 package com.back.domain.wiseSaying.controller;
 
-import com.back.domain.wiseSaying.repository.WiseSayingRepository;
+import com.back.domain.wiseSaying.entity.WiseSaying;
 import com.back.domain.wiseSaying.service.WiseSayingService;
+
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /*
 * 역할 : 고객의 명령을 입력받고 적절한 응답을 표현
@@ -13,30 +17,80 @@ import com.back.domain.wiseSaying.service.WiseSayingService;
 역할 : 명언에 관련된 응대*/
 public class WiseSayingController {
     WiseSayingService wiseSayingService = new WiseSayingService();
-    public void start() {
-        System.out.println("== 명언 앱 ==");
-        if(true){
-            create();
+    Scanner sc = new Scanner(System.in);
+
+    public void start(String cmd) {
+        if(cmd.equals("등록")) {
+            create(cmd);
         }
-    }
-    public void create() {
-        System.out.println("명언을 등록합니다.");
-        wiseSayingService.create();
+        else if (cmd.startsWith("수정")) {
+            update(cmd);
+        }
+        else if (cmd.startsWith("삭제")) {
+            delete(cmd);
+        }
+        else if (cmd.equals("목록")) {
+            findAll();
+        }
 
     }
-    public void update() {
-        System.out.println("명언을 등록합니다.");
-        wiseSayingService.update();
+
+    public void create(String cmd) {
+        System.out.print("명언 : ");
+        String content = sc.nextLine();
+        System.out.print("작가 : ");
+        String author = sc.nextLine();
+
+        int wiseId = wiseSayingService.create(content, author);
+
+        System.out.println(wiseId + "번 명언이 등록되었습니다.");
+    }
+
+    public void update(String cmd) {
+        int wiseId = getIdFromCmd(cmd);
+
+        WiseSaying w = wiseSayingService.findById(wiseId);
+        if(w == null) {
+            System.out.println(wiseId + "번 명언은 존재하지 않습니다.");
+            return;
+        }
+
+        System.out.print("명언(기존) : ");
+        String new_content = sc.nextLine();
+        System.out.print("작가(기존) : ");
+        String new_author = sc.nextLine();
+
+        wiseSayingService.update(wiseId, new_content, new_author);
+    }
+
+    public void delete(String cmd) {
+        int wiseId = getIdFromCmd(cmd);
+
+        WiseSaying w = wiseSayingService.findById(wiseId);
+        if(w == null) {
+            System.out.println(wiseId + "번 명언은 존재하지 않습니다.");
+            return;
+        }
+
+        wiseSayingService.delete(wiseId);
 
     }
-    public void delete() {
-        System.out.println("명언을 등록합니다.");
-        wiseSayingService.delete();
 
-    }
     public void findAll() {
-        System.out.println("명언을 등록합니다.");
+
         wiseSayingService.findAll();
+
+    }
+
+
+    private int getIdFromCmd(String cmd) {
+        Pattern pattern = Pattern.compile("\\?id=(\\d+)");
+        Matcher matcher = pattern.matcher(cmd);
+        if(matcher.find()){
+            return Integer.parseInt( matcher.group(1));
+        }else{
+            return -1;
+        }
 
     }
 }

@@ -8,7 +8,7 @@ package com.back.domain.system.controller;
 
 역할 : 시스템에 관련된 응대*/
 public class SystemController {
-    public void start() {
-        System.out.println("시스템을 종료합니다.");
+    public Boolean start(String cmd) {
+        return cmd.equals("종료");
     }
 }
