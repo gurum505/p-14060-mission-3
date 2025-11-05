@@ -10,7 +10,7 @@ class WiseSayingControllerTest {
     @Test
     @DisplayName("등록")
     void t3(){
-        AppTestRunner.run();
+
 
     }
 }

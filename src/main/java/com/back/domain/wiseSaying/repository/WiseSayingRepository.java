@@ -5,4 +5,15 @@ package com.back.domain.wiseSaying.repository;
 
 스캐너 사용금지, 출력 금지*/
 public class WiseSayingRepository {
+    String dbPath = "wiseSaying.db";
+
+    public void create() {
+    }
+    public void update() {
+    }
+    public void delete() {
+    }
+    public void findAll() {
+    }
+
 }
