@@ -3,6 +3,7 @@ package com.back.domain.wiseSaying.controller;
 import com.back.domain.wiseSaying.entity.WiseSaying;
 import com.back.domain.wiseSaying.service.WiseSayingService;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,7 +20,9 @@ public class WiseSayingController {
     WiseSayingService wiseSayingService = new WiseSayingService();
     Scanner sc = new Scanner(System.in);
 
+
     public void start(String cmd) {
+        init();
         if(cmd.equals("등록")) {
             create(cmd);
         }
@@ -32,7 +35,10 @@ public class WiseSayingController {
         else if (cmd.equals("목록")) {
             findAll();
         }
+    }
 
+    public void init() {
+        wiseSayingService.findAll();
     }
 
     public void create(String cmd) {
@@ -77,9 +83,8 @@ public class WiseSayingController {
     }
 
     public void findAll() {
-
-        wiseSayingService.findAll();
-
+        ArrayList<WiseSaying> wiseSayings = wiseSayingService.findAll();
+        System.out.println();
     }
 
 

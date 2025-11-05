@@ -33,10 +33,10 @@ public class WiseSaying {
         this.author = author;
     }
 
-    public int getLastId () {
+    public static int getLastId() {
         return lastId;
     }
-    public void setLastId(int lastId) {
+    public static void setLastId(int lastId) {
         WiseSaying.lastId = lastId;
     }
 
