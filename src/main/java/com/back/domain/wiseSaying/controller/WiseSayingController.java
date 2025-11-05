@@ -60,13 +60,15 @@ public class WiseSayingController {
             System.out.println(wiseId + "번 명언은 존재하지 않습니다.");
             return;
         }
-
-        System.out.print("명언(기존) : ");
+        System.out.println("명언(기존) : " + w.getContent());
+        System.out.print("명언 : ");
         String new_content = sc.nextLine();
-        System.out.print("작가(기존) : ");
+        System.out.println("작가(기존) : " + w.getAuthor());
+        System.out.print("작가 : ");
         String new_author = sc.nextLine();
 
         wiseSayingService.update(wiseId, new_content, new_author);
+
     }
 
     public void delete(String cmd) {
@@ -77,9 +79,7 @@ public class WiseSayingController {
             System.out.println(wiseId + "번 명언은 존재하지 않습니다.");
             return;
         }
-
         wiseSayingService.delete(wiseId);
-
     }
 
     public void findAll() {

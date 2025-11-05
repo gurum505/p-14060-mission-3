@@ -2,10 +2,11 @@ package com.back.domain.wiseSaying.repository;
 
 import com.back.domain.wiseSaying.entity.WiseSaying;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /*
 * 역할 : 데이터의 조회/수정/삭제/생성을 담당
@@ -31,8 +32,27 @@ public class WiseSayingRepository {
         }
     }
     public void update(WiseSaying w) {
+        try(BufferedWriter bw = new BufferedWriter(new FileWriter(dbPath + w.getId() + ".json"))){
+            String formattedString = String.format(
+                    """
+                            {
+                            "id" : %d,
+                            "content" : "%s",
+                            "author" : "%s"
+                            }
+                    """
+                    ,w.getId(),w.getContent(),w.getAuthor());
+            bw.write(formattedString);
+
+        }catch (IOException e){
+            throw new RuntimeException(e);
+        }
     }
     public void delete(int wiseId) {
+        File file = new File(dbPath + wiseId + ".json");
+        if (file.exists()){
+            file.delete();
+        }
     }
     public ArrayList<WiseSaying> findAll() {
         //Wisesaying 리스트 반환
@@ -40,8 +60,57 @@ public class WiseSayingRepository {
         return null;
     }
     public WiseSaying findById(int wiseId) {
-        //id로 명언 찾기
-        //없는 id면 null 반환
+        File[] files = new File(dbPath).listFiles();
+        if (files == null){
+            return null;
+        }
+        for(File file : files){
+            if(file.getName().equals(wiseId + ".json")){
+                return JsonToWiseSaying(file);
+            }
+        }
+        return null;
+    }
+    public void setLastId(int lastId) {
+        try(BufferedWriter bw = new BufferedWriter(new FileWriter(dbPath + "lastId.txt"))){
+            bw.write(String.valueOf(lastId));
+        }catch (IOException e){
+            throw new RuntimeException(e);
+        }
+    }
+    public int getLastId() {
+        File file = new File(dbPath + "lastId.txt");
+        if (file.exists()){
+            try(BufferedReader br = new BufferedReader(new FileReader(file))){
+                return Integer.parseInt(br.readLine());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return 0;
+    }
+
+    private WiseSaying JsonToWiseSaying(File file){
+        //jsonString -> WiseSaying 객체 반환
+        String fileString;
+        try(BufferedReader bf = new BufferedReader(new FileReader( file))){
+            fileString = bf.lines().collect(Collectors.joining("\n"));
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
+        String regexString =
+                "\"id\"\\s:\\s(\\d+),\\s*" +
+            "\"content\"\\s:\\s\"([^\"]*)\",\\s*" +
+                "\"author\"\\s:\\s\"([^\"]*)\"";
+        Pattern pattern = Pattern.compile(regexString,Pattern.DOTALL);
+        Matcher matcher = pattern.matcher(fileString);
+
+        if (matcher.find()){
+            int id = Integer.parseInt(matcher.group(1));
+            String content = matcher.group(2);
+            String author = matcher.group(3);
+            return new WiseSaying(id,content,author);
+        }
         return null;
     }
 
