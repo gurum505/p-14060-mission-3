@@ -35,6 +35,9 @@ public class WiseSayingController {
         else if (cmd.equals("목록")) {
             findAll();
         }
+        else if (cmd.equals("빌드")) {
+            build();
+        }
     }
 
     public void init() {
@@ -80,6 +83,7 @@ public class WiseSayingController {
             return;
         }
         wiseSayingService.delete(wiseId);
+        System.out.println(wiseId + "번 명언이 삭제되었습니다.");
     }
 
     public void findAll() {
@@ -102,4 +106,10 @@ public class WiseSayingController {
         }
 
     }
+
+    public void build() {
+        wiseSayingService.build();
+        System.out.println("data.json 파일의 내용이 갱신되었습니다.");
+    }
+
 }

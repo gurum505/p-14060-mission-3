@@ -23,7 +23,7 @@ public class App {
             String cmd = sc.nextLine();
 
             Boolean shouldExit = false;
-            if (cmd.equals("등록") || cmd.equals("목록") || cmd.startsWith("삭제") || cmd.startsWith("수정")) {
+            if (cmd.equals("등록") || cmd.equals("목록") || cmd.startsWith("삭제") || cmd.startsWith("수정") || cmd.equals("빌드")) {
                 wiseSayingController.start(cmd);
             }
             else{

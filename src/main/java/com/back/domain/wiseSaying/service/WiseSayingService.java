@@ -56,4 +56,13 @@ public class WiseSayingService {
         return w;
     }
 
+    public void build() {
+
+        ArrayList<WiseSaying> wiseSayings = findAll();
+        if (wiseSayings.isEmpty()) {
+            return;
+        }
+        wiseSayingRepository.build(wiseSayings);
+    }
+
 }

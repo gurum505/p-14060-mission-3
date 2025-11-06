@@ -18,32 +18,14 @@ public class WiseSayingRepository {
 
     public void create(WiseSaying w) {
         try(BufferedWriter bw = new BufferedWriter(new FileWriter(dbPath + w.getId() + ".json"))){
-            String formattedString = String.format(
-                    "{\n" +
-                            "\"id\" : %s,\n" +
-                            "\"content\" : \"%s\",\n" +
-                            "\"author\" : \"%s\"\n"  +
-                    "}"
-                    ,w.getId(),w.getContent(),w.getAuthor());
-            bw.write(formattedString);
-
+            bw.write(formattedString(w));
         }catch (IOException e){
             throw new RuntimeException(e);
         }
     }
     public void update(WiseSaying w) {
         try(BufferedWriter bw = new BufferedWriter(new FileWriter(dbPath + w.getId() + ".json"))){
-            String formattedString = String.format(
-                    """
-                            {
-                            "id" : %d,
-                            "content" : "%s",
-                            "author" : "%s"
-                            }
-                    """
-                    ,w.getId(),w.getContent(),w.getAuthor());
-            bw.write(formattedString);
-
+            bw.write(formattedString(w));
         }catch (IOException e){
             throw new RuntimeException(e);
         }
@@ -101,8 +83,8 @@ public class WiseSayingRepository {
         return 0;
     }
 
+    //jsonString -> WiseSaying 객체 반환
     private WiseSaying JsonToWiseSaying(File file){
-        //jsonString -> WiseSaying 객체 반환
         String fileString;
         try(BufferedReader bf = new BufferedReader(new FileReader( file))){
             fileString = bf.lines().collect(Collectors.joining("\n"));
@@ -123,6 +105,36 @@ public class WiseSayingRepository {
             return new WiseSaying(id,content,author);
         }
         return null;
+    }
+
+    private String formattedString(WiseSaying w){
+        return String.format(
+                """
+                        {
+                        "id" : %d,
+                        "content" : "%s",
+                        "author" : "%s"
+                        }"""
+                ,w.getId(),w.getContent(),w.getAuthor());
+    }
+
+    public void build(ArrayList<WiseSaying> wiseSayings) {
+        try(BufferedWriter bw = new BufferedWriter(new FileWriter(dbPath + "data.json"))){
+            bw.write("[\n");
+            for(int i = 0 ; i < wiseSayings.size(); i++){
+                WiseSaying w = wiseSayings.get(i);
+                if (i < wiseSayings.size() - 1) {
+                    bw.write(formattedString(w) + ",\n");
+                }else{
+                    bw.write(formattedString(w) + "\n");
+                }
+            }
+            bw.write("]");
+
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
