@@ -84,7 +84,11 @@ public class WiseSayingController {
 
     public void findAll() {
         ArrayList<WiseSaying> wiseSayings = wiseSayingService.findAll();
-        System.out.println();
+        System.out.println("번호 / 작가 / 명언");
+        System.out.println("----------------------");
+        for(WiseSaying w:wiseSayings){
+            System.out.println(w);
+        }
     }
 
 

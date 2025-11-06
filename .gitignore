@@ -18,6 +18,7 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 db/wiseSaying/
+src/main/java/com/back/test.java
 
 ### Eclipse ###
 .apt_generated

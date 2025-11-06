@@ -55,9 +55,20 @@ public class WiseSayingRepository {
         }
     }
     public ArrayList<WiseSaying> findAll() {
-        //Wisesaying 리스트 반환
-        //sort by id desc
-        return null;
+        File[] files = new File(dbPath).listFiles();
+        ArrayList<WiseSaying> wiseSayings = new ArrayList<>();
+
+        if (files == null){
+            return wiseSayings;
+        }
+        for(File file : files){
+            if(file.getName().endsWith(".json")){
+                WiseSaying w = JsonToWiseSaying(file);
+                wiseSayings.add(w);
+            }
+        }
+        wiseSayings.sort((a,b) -> b.getId() - a.getId());
+        return wiseSayings;
     }
     public WiseSaying findById(int wiseId) {
         File[] files = new File(dbPath).listFiles();

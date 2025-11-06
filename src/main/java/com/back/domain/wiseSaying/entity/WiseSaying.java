@@ -42,6 +42,6 @@ public class WiseSaying {
 
     @Override
     public String toString() {
-        return super.toString();
+        return id + " / " + content + " / " + author;
     }
 }
