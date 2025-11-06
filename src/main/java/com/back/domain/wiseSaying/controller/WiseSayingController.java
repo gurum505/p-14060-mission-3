@@ -17,14 +17,23 @@ import java.util.regex.Pattern;
 
 역할 : 명언에 관련된 응대*/
 public class WiseSayingController {
-    WiseSayingService wiseSayingService = new WiseSayingService();
-    Scanner sc = new Scanner(System.in);
+    WiseSayingService wiseSayingService;
+    Scanner sc;
 
+    public WiseSayingController() {
+        this.sc = new Scanner(System.in);
+        this.wiseSayingService =new WiseSayingService();
+    }
+
+    public WiseSayingController(Scanner sc, WiseSayingService wiseSayingService) {
+        this.sc = sc;
+        this.wiseSayingService = wiseSayingService;
+    }
 
     public void start(String cmd) {
         init();
         if(cmd.equals("등록")) {
-            create(cmd);
+            create();
         }
         else if (cmd.startsWith("수정")) {
             update(cmd);
@@ -44,7 +53,7 @@ public class WiseSayingController {
         wiseSayingService.findAll();
     }
 
-    public void create(String cmd) {
+    public void create() {
         System.out.print("명언 : ");
         String content = sc.nextLine();
         System.out.print("작가 : ");
